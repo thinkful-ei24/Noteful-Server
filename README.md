@@ -14,9 +14,14 @@ Noteful API
 ├── /users
 │   └── POST
 │       └── /
+├── /cards
+│   └── Get
+│       └── /
+│       └── /:id
 ```
 
 ### POST `/api/auth/login`
+Login user
 ```js
 // req.body
 {
@@ -31,6 +36,7 @@ Noteful API
 ```
 
 ### POST `/api/auth/refresh`
+Refresh JWT
 ```js
 // req.header
 Authorization: Bearer ${token}
@@ -42,6 +48,7 @@ Authorization: Bearer ${token}
 ```
 
 ### POST `/api/users/`
+Create user
 ```js
 // req.body
 {
@@ -54,5 +61,40 @@ Authorization: Bearer ${token}
 {
   name: String,
   username: String
+}
+```
+
+### GET `/api/cards/`
+Retreives first card
+```js
+// req.header
+Authorization: Bearer ${token}
+
+// res.body
+{
+  userId: String,
+  note: String,
+  memory: Number,
+  next: String,
+  correct: Number,
+  total: Number
+}
+```
+
+
+### GET `/api/cards/:id`
+Retreives card by ID
+```js
+// req.header
+Authorization: Bearer ${token}
+
+// res.body
+{
+  userId: String,
+  note: String,
+  memory: Number,
+  next: String,
+  correct: Number,
+  total: Number
 }
 ```

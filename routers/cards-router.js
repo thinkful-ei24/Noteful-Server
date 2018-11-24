@@ -14,7 +14,7 @@ router.get('/', jwtAuth, (req, res, next) => {
 
   return Card.find({ userId })
     .sort() // implement later to get first card
-    .then(cards => res.json(cards[0]))
+    .then(cards => res.json(cards[0].serialize()))
     .catch(err => next(err));
 });
 
@@ -23,7 +23,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
   const id = req.params.id;
 
   return Card.findOne({ userId, _id: id })
-    .then(card => res.json(card))
+    .then(card => res.json(card.serialize()))
     .catch(err => next(err));
 });
 
