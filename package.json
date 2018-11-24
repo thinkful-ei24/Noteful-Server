@@ -1,7 +1,7 @@
 {
-  "name": "thinkful-backend-template",
+  "name": "noteful-server",
   "version": "1.0.0",
-  "description": "Template for an Express backend",
+  "description": "Backend for spaced repetition app noteful",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -12,15 +12,13 @@
     "heroku": "node index.js",
     "travis": "npm run mocha"
   },
-  "author": "Joe Turner <jturner@thinkful.com>",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "knex": "^0.15.2",
     "mongoose": "^5.2.6",
-    "morgan": "^1.9.0",
-    "pg": "^7.4.3"
+    "morgan": "^1.9.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
