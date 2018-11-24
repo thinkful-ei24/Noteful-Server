@@ -8,7 +8,6 @@ const router = express.Router();
 
 // Create new user
 router.post('/', (req, res) => {
-  console.log(req);
   const newUser = {
     name: req.body.name,
     username: req.body.username,

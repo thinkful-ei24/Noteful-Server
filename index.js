@@ -1,17 +1,23 @@
 /* eslint-disable no-console */
 'use strict';
 
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const express = require('express');
+const morgan = require('morgan');
+const passport = require('passport');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 const userRouter = require('./routers/user-router');
+const localStrategy = require('./passport/local-strategy');
+const jwtStrategy = require('./passport/jwt-strategy');
 
 const app = express();
 const jsonParser = bodyParser.json();
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
