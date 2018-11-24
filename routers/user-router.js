@@ -21,29 +21,25 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: validation.error });
   }
 
-  User.findOne({
-    $or: [
-      { email: newUser.email },
-      { username: newUser.username }
-    ]
-  }).then(user => {
-    if (user) {
-      return res.status(400).json({ error: 'Database Error: A user with that username and/or email already exists.' });
-    }
-    return User.hashPassword(newUser.password);
-  }).then(passwordHash => {
-    newUser.password = passwordHash;
-    User.create(newUser)
-      .then(createdUser => {
-        return res.status(201).json(createdUser.serialize());
-      })
-      .catch(error => {
-        console.error(error);
-        return res.status(500).json({
-          error: error.message
+  User.findOne({ username: newUser.username })
+    .then(user => {
+      if (user) {
+        return res.status(400).json({ error: 'Database Error: A user with that username already exists.' });
+      }
+      return User.hashPassword(newUser.password);
+    }).then(passwordHash => {
+      newUser.password = passwordHash;
+      User.create(newUser)
+        .then(createdUser => {
+          return res.status(201).json(createdUser.serialize());
+        })
+        .catch(error => {
+          console.error(error);
+          return res.status(500).json({
+            error: error.message
+          });
         });
-      });
-  });
+    });
 });
 
 module.exports = router;
