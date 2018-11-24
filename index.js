@@ -9,9 +9,12 @@ const passport = require('passport');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
+
+const authRouter = require('./routers/auth-router');
 const userRouter = require('./routers/user-router');
-const localStrategy = require('./passport/local-strategy');
+
 const jwtStrategy = require('./passport/jwt-strategy');
+const localStrategy = require('./passport/local-strategy');
 
 const app = express();
 const jsonParser = bodyParser.json();
@@ -33,6 +36,7 @@ app.use(
 
 app.use(jsonParser);
 
+app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 
 function runServer(port = PORT) {
