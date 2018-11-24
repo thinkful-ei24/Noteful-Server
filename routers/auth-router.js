@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict';
 
 const express = require('express');
@@ -20,14 +19,12 @@ const createAuthToken = function(user) {
   });
 };
 
-module.exports = createAuthToken;
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());
   return res.json({ authToken });
 });
 
 router.post('/refresh', jwtAuth, (req, res) => {
-  console.log(req.user);
   const authToken = createAuthToken(req.user);
   return res.json({ authToken });
 });
