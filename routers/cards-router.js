@@ -13,8 +13,17 @@ router.get('/', jwtAuth, (req, res, next) => {
   const userId = req.user.id;
 
   return Card.find({ userId })
-    .sort() // implement late to get first card
-    .then(results => res.json(results[0]))
+    .sort() // implement later to get first card
+    .then(cards => res.json(cards[0]))
+    .catch(err => next(err));
+});
+
+router.get('/:id', jwtAuth, (req, res, next) => {
+  const userId = req.user.id;
+  const id = req.params.id;
+
+  return Card.findOne({ userId, _id: id })
+    .then(card => res.json(card))
     .catch(err => next(err));
 });
 

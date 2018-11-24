@@ -18,8 +18,8 @@ const CardSchema = mongoose.Schema({
     default: 0
   },
   next: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Card'
   },
   correct: {
     type: Number,
