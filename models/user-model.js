@@ -1,5 +1,6 @@
 'use strict';
 const bcrypt = require('bcryptjs');
+const Joi = require('joi');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
@@ -36,4 +37,11 @@ UserSchema.statics.hashPassword = function(password) {
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = { User };
+const UserJoiSchema = Joi.object().keys({
+  name: Joi.string().min(1).trim().required(),
+  username: Joi.string().alphanum().min(1).max(30).trim().required(),
+  password: Joi.string().min(10).max(30).trim().required()
+});
+
+
+module.exports = { User, UserJoiSchema };

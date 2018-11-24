@@ -4,11 +4,14 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
+const userRouter = require('./routers/user-router');
 
 const app = express();
+const jsonParser = bodyParser.json();
 
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
@@ -21,6 +24,10 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+
+app.use(jsonParser);
+
+app.use('/api/users', userRouter);
 
 function runServer(port = PORT) {
   const server = app
