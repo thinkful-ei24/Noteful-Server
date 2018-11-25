@@ -9,7 +9,7 @@ const { cards } = require('../db/data');
 const router = express.Router();
 
 // Create new user
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const newUser = {
     name: req.body.name,
     username: req.body.username,
@@ -22,33 +22,37 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: validation.error });
   }
 
-  User.findOne({ username: newUser.username })
-    .then(user => {
-      if (user) {
-        return res.status(400).json({ error: 'Database Error: A user with that username already exists.' });
-      }
-      return User.hashPassword(newUser.password);
-    }).then(passwordHash => {
-      newUser.password = passwordHash;
-      User.create(newUser)
-        .then(createdUser => {
-          // seed cards here
-          const newCards = cards.map(card => ({
-            ...card,
-            userId: createdUser.id
-          }));
-          Card.insertMany(newCards)
-            .then(() => {
-              return res.status(201).json(createdUser.serialize());
-            });
-        })
-        .catch(error => {
-          console.error(error);
-          return res.status(500).json({
-            error: error.message
-          });
-        });
-    });
+  const user = await User.findOne({ username: newUser.username });
+  if (user) {
+    return res.status(400).json({ error: 'Database Error: A user with that username already exists.' });
+  }
+
+  const passwordHash = await User.hashPassword(newUser.password);
+
+  newUser.password = passwordHash;
+  const createdUser = await User.create(newUser);
+
+  const newCards = cards.map(card => ({
+    ...card,
+    userId: createdUser.id
+  }));
+
+  let card = await Card.create(newCards[0]);
+  createdUser.head = card.id;
+
+  await User.findOneAndUpdate({ _id: createdUser.id }, createdUser);
+
+  // const headless = await User.findOne({ _id: createdUser.id });
+  // console.log(headless);
+
+  for (let i = 1; i< newCards.length; i++) {
+    const newCard = await Card.create(newCards[i]);
+    card.next = newCard.id;
+    await Card.findOneAndUpdate({ _id: card.id }, card);
+    card = newCard;
+  }
+
+  return res.status(201).json(createdUser.serialize());
 });
 
 module.exports = router;
