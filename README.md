@@ -138,13 +138,5 @@ Authorization: Bearer ${token}
   total: Number
 }
 
-// res.body
-{
-  userId: String,
-  note: String,
-  memory: Number,
-  next: String,
-  correct: Number,
-  total: Number
-}
+// res (No Content)
 ```
