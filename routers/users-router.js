@@ -3,7 +3,9 @@
 
 const express = require('express');
 const Joi = require('joi');
+const { Card } = require('../models/card-model');
 const { User, UserJoiSchema } = require('../models/user-model');
+const { cards } = require('../db/data');
 const router = express.Router();
 
 // Create new user
@@ -30,7 +32,15 @@ router.post('/', (req, res) => {
       newUser.password = passwordHash;
       User.create(newUser)
         .then(createdUser => {
-          return res.status(201).json(createdUser.serialize());
+          // seed cards here
+          const newCards = cards.map(card => ({
+            ...card,
+            userId: createdUser.id
+          }));
+          Card.insertMany(newCards)
+            .then(() => {
+              return res.status(201).json(createdUser.serialize());
+            });
         })
         .catch(error => {
           console.error(error);

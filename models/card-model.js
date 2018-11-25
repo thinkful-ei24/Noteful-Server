@@ -15,7 +15,7 @@ const CardSchema = mongoose.Schema({
   memory: {
     type: Number,
     required: true,
-    default: 0
+    default: 1
   },
   next: {
     type: mongoose.Schema.Types.ObjectId,
