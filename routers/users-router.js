@@ -42,9 +42,6 @@ router.post('/', async (req, res) => {
 
   await User.findOneAndUpdate({ _id: createdUser.id }, createdUser);
 
-  // const headless = await User.findOne({ _id: createdUser.id });
-  // console.log(headless);
-
   for (let i = 1; i< newCards.length; i++) {
     const newCard = await Card.create(newCards[i]);
     card.next = newCard.id;
