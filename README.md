@@ -65,20 +65,22 @@ Create user
 ```
 
 ### GET `/api/cards/`
-Retreives first card
+Retreives all card
 ```js
 // req.header
 Authorization: Bearer ${token}
 
 // res.body
-{
-  userId: String,
-  note: String,
-  memory: Number,
-  next: String,
-  correct: Number,
-  total: Number
-}
+[
+  {
+    userId: String,
+    note: String,
+    memory: Number,
+    next: String,
+    correct: Number,
+    total: Number
+  }
+]
 ```
 
 

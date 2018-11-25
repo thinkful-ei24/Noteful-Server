@@ -13,8 +13,8 @@ router.get('/', jwtAuth, (req, res, next) => {
   const userId = req.user.id;
 
   return Card.find({ userId })
-    .sort() // implement later to get first card
-    .then(cards => res.json(cards[0].serialize()))
+    .sort()
+    .then(cards => res.json(cards.map(card => card.serialize())))
     .catch(err => next(err));
 });
 
