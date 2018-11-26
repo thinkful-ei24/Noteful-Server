@@ -37,7 +37,7 @@ Authorization: Bearer ${token}
 
 // res.body
 {
-  authToken: ${token}
+  authToken: String
 }
 ```
 
