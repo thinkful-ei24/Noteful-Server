@@ -11,26 +11,31 @@ const router = express.Router();
 const options = { session: false, failWithError: true };
 const jwtAuth = passport.authenticate('jwt', options);
 
-const insertCard = async (userId, cardId, memory, correct=0, total=0) => {
+const insertCard = async (userId, card) => {
+  const { memory, correct, total, next, id: cardId } = card;
   const user = await User.findOne({ _id: userId });
-  const updateCard = await Card.findOne({ userId, _id: cardId });
+  // const updateCard = await Card.findOne({ userId, _id: cardId });
   let head = user.head;
   if (head === cardId) {
     // if the update card is the head, change the head
     // if it isn't don't change the head
-    head = updateCard.next;
+    head = next;
     await User.findOneAndUpdate({ _id: userId }, { head });
   }
 
   const cards = await Card.find({ userId });
+  let cardsLookup = {};
+  cards.forEach(card => {
+    cardsLookup[card.id] = card;
+  });
 
   let counter = 1;
-  let tempCard = cards.find(card => card.id === head);
+  let tempCard = cardsLookup[head];
 
   // find the position the put the card
   while (counter < memory && tempCard.next) {
     counter++;
-    tempCard = cards.find(card => card.id === tempCard.next);
+    tempCard = cardsLookup[tempCard.next];
   }
 
   // the card you put in will point to the next value of the card before
@@ -79,7 +84,6 @@ router.get('/:id', jwtAuth, (req, res, next) => {
 router.patch('/:id', jwtAuth, async (req, res, next) => {
   const userId = req.user.id;
   const id = req.params.id;
-  const { memory, correct, total } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
@@ -88,7 +92,7 @@ router.patch('/:id', jwtAuth, async (req, res, next) => {
   }
 
   try {
-    await insertCard(userId, id, memory, correct, total);
+    await insertCard(userId, req.body);
     res.json();
   } catch (e) {
     next(e);
@@ -97,12 +101,3 @@ router.patch('/:id', jwtAuth, async (req, res, next) => {
 
 
 module.exports = router;
-
-
-// Total 1 + 1 + 0 ... = 2
-// Correct 1 + 0 + 0 ...  = 1
-// Point = 0
-// Correct - (Total - Correct)
-// 1 - (2-1) = 0
-
-//
