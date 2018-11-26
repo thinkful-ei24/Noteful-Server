@@ -11,7 +11,8 @@ const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 
 const authRouter = require('./routers/auth-router');
-const userRouter = require('./routers/user-router');
+const userRouter = require('./routers/users-router');
+const cardRouter = require('./routers/cards-router');
 
 const jwtStrategy = require('./passport/jwt-strategy');
 const localStrategy = require('./passport/local-strategy');
@@ -37,6 +38,7 @@ app.use(
 app.use(jsonParser);
 
 app.use('/api/auth', authRouter);
+app.use('/api/cards', cardRouter);
 app.use('/api/users', userRouter);
 
 app.use((req, res, next) => {
