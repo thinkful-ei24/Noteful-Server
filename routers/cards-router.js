@@ -11,11 +11,40 @@ const router = express.Router();
 const options = { session: false, failWithError: true };
 const jwtAuth = passport.authenticate('jwt', options);
 
+const insertCard = async (userId, cardId, memory, correct=0, total=0) => {
+  const user = await User.findOne({ _id: userId });
+  const updateCard = await Card.findOne({ userId, _id: cardId });
+  let head = user.head;
+  if (head === cardId) {
+    // if the update card is the head, change the head
+    // if it isn't don't change the head
+    head = updateCard.next;
+    await User.findOneAndUpdate({ _id: userId }, { head });
+  }
+
+  const cards = await Card.find({ userId });
+
+  let counter = 1;
+  let tempCard = cards.find(card => card.id === head);
+
+  // find the position the put the card
+  while (counter < memory && tempCard.next) {
+    counter++;
+    tempCard = cards.find(card => card.id === tempCard.next);
+  }
+
+  // the card you put in will point to the next value of the card before
+  const updateData = { memory, correct, total, next: tempCard.next };
+  await Card.findOneAndUpdate({ userId, _id: cardId }, updateData);
+  // the card before will point to the card you are putting in
+  await Card.findOneAndUpdate({ userId, _id: tempCard.id }, { next: cardId });
+};
+
 router.get('/', jwtAuth, (req, res, next) => {
   const userId = req.user.id;
 
   return Card.find({ userId })
-    .sort()
+    .sort('note')
     .then(cards => res.json(cards.map(card => card.serialize())))
     .catch(err => next(err));
 });
@@ -59,17 +88,21 @@ router.patch('/:id', jwtAuth, async (req, res, next) => {
   }
 
   try {
-    // put card at back for now (make next null)
-    const updateCard = { memory, correct, total, next: null };
-    const updatedCard = await Card.findOneAndUpdate({ userId, _id: id }, updateCard);
-
-    // update previous last card and head pointer
-    await Card.findOneAndUpdate({ next: null }, { next: updatedCard.id });
-    await User.findOneAndUpdate({ _id: userId }, { head: updatedCard.next });
+    await insertCard(userId, id, memory, correct, total);
     res.json();
   } catch (e) {
     next(e);
   }
 });
 
+
 module.exports = router;
+
+
+// Total 1 + 1 + 0 ... = 2
+// Correct 1 + 0 + 0 ...  = 1
+// Point = 0
+// Correct - (Total - Correct)
+// 1 - (2-1) = 0
+
+//
