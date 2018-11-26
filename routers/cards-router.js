@@ -60,9 +60,8 @@ router.get('/first', jwtAuth, async (req, res, next) => {
   const user = await User.findOne({ _id: userId });
   const head = user.head;
 
-  return Card.find({ userId, _id: head })
-    .sort()
-    .then(cards => cards? res.json(cards[0].serialize()) : next())
+  return Card.findOne({ userId, _id: head })
+    .then(card => card ? res.json(card.serialize()) : next())
     .catch(err => next(err));
 });
 
