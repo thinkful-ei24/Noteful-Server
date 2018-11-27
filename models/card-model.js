@@ -20,8 +20,6 @@ const CardSchema = mongoose.Schema({
   next: {
     type: String,
     default: null
-    // type: mongoose.Schema.Types.ObjectId,
-    // ref: 'Card'
   },
   correct: {
     type: Number,

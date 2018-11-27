@@ -65,21 +65,6 @@ router.get('/first', jwtAuth, async (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.get('/:id', jwtAuth, (req, res, next) => {
-  const userId = req.user.id;
-  const id = req.params.id;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error('The `id` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-
-  return Card.findOne({ userId, _id: id })
-    .then(card => card ? res.json(card.serialize()) : next())
-    .catch(err => next(err));
-});
-
 router.patch('/:id', jwtAuth, async (req, res, next) => {
   const userId = req.user.id;
   const id = req.params.id;
@@ -97,6 +82,5 @@ router.patch('/:id', jwtAuth, async (req, res, next) => {
     next(e);
   }
 });
-
 
 module.exports = router;
