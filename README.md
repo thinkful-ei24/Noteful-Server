@@ -19,8 +19,11 @@ Noteful API
 │   └── POST
 │       └── /
 ├── /cards
-│   └── Get
+│   └── GET
 │       └── /
+│       └── /first
+│       └── /:id
+│   └── PATCH
 │       └── /:id
 ```
 
@@ -69,7 +72,7 @@ Create user
 ```
 
 ### GET `/api/cards/`
-Retreives all card
+Retreives all cards
 ```js
 // req.header
 Authorization: Bearer ${token}
@@ -87,6 +90,23 @@ Authorization: Bearer ${token}
 ]
 ```
 
+### GET `/api/cards/first`
+Retreives user's first card
+```js
+// req.header
+Authorization: Bearer ${token}
+
+// res.body
+{
+  userId: String,
+  note: String,
+  memory: Number,
+  next: String,
+  correct: Number,
+  total: Number
+}
+
+```
 
 ### GET `/api/cards/:id`
 Retreives card by ID
@@ -103,4 +123,20 @@ Authorization: Bearer ${token}
   correct: Number,
   total: Number
 }
+```
+
+### PATCH `/api/cards/:id`
+Retreives card by ID
+```js
+// req.header
+Authorization: Bearer ${token}
+
+// req.body
+{
+  memory: Number,
+  correct: Number,
+  total: Number
+}
+
+// res (No Content)
 ```

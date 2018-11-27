@@ -15,11 +15,13 @@ const CardSchema = mongoose.Schema({
   memory: {
     type: Number,
     required: true,
-    default: 0
+    default: 1
   },
   next: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Card'
+    type: String,
+    default: null
+    // type: mongoose.Schema.Types.ObjectId,
+    // ref: 'Card'
   },
   correct: {
     type: Number,
@@ -35,6 +37,7 @@ const CardSchema = mongoose.Schema({
 
 CardSchema.methods.serialize = function() {
   return {
+    id: this.id,
     userId: this.userId,
     note: this.note,
     memory: this.memory,
