@@ -129,9 +129,9 @@ Authorization: Bearer ${token}
 ## Built With
 
 * [Node.js](https://nodejs.org/)
-* [Express](https://expressjs.com/) - Data collection
-* [Mongoose](https://mongoosejs.com/) - Object Modeling
-* [MongoDB](https://www.mongodb.com/) - Database
+* [Express](https://expressjs.com/)
+* [Mongoose](https://mongoosejs.com/)
+* [MongoDB](https://www.mongodb.com/)
 
 ## Authors
 * **Kent Tokunaga** - [kenttoku](https://github.com/kenttoku)
