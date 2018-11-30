@@ -6,6 +6,9 @@ Noteful API
 
 [https://notefulserver.herokuapp.com/](https://notefulserver.herokuapp.com/)
 
+## Instructions for Reuse
+- To get started, clone this repo and run `npm install`
+
 ## API Overview
 
 ```text
@@ -108,7 +111,7 @@ Authorization: Bearer ${token}
 ```
 
 ### PATCH `/api/cards/:id`
-Retreives card by ID
+Edits card by ID
 ```js
 // req.header
 Authorization: Bearer ${token}
@@ -122,3 +125,15 @@ Authorization: Bearer ${token}
 
 // res (No Content)
 ```
+
+## Built With
+
+* [Node.js](https://nodejs.org/)
+* [Express](https://expressjs.com/) - Data collection
+* [Mongoose](https://mongoosejs.com/) - Object Modeling
+* [MongoDB](https://www.mongodb.com/) - Database
+
+## Authors
+* **Kent Tokunaga** - [kenttoku](https://github.com/kenttoku)
+* **Chelsea Kent** - [clkent](https://github.com/clkent)
+* **Shane Lupton** - [slupton89](https://github.com/slupton89)
