@@ -3,6 +3,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const { User } = require('../models/user-model');
 
 const { JWT_EXPIRY, JWT_SECRET } = require('../config');
 
@@ -27,6 +28,14 @@ router.post('/login', localAuth, (req, res) => {
 router.post('/refresh', jwtAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
   return res.json({ authToken });
+});
+
+router.post('/demo', (req, res) => {
+  User.findOne({ username: 'demouser' })
+    .then(user => {
+      const authToken = createAuthToken(user.serialize());
+      return res.json({ authToken });
+    });
 });
 
 module.exports = router;
